@@ -1,0 +1,40 @@
+describe("Employee CRUD Test", () => {
+  // Step 1: Login with credentials
+  it("Login as Admin", () => {
+    cy.visit("https://opensource-demo.orangehrmlive.com/"); // Open the OrangeHRM website
+    cy.get('input[name="txtUsername"]').type("Admin");
+    cy.get('input[name="txtPassword"]').type("admin123");
+    cy.get('input[name="Submit"]').click();
+  });
+
+  // Step 2: Navigate to "PIM"
+  it("Navigate to PIM Page", () => {
+    cy.get('#menu_pim_viewPimModule').click();
+  });
+
+  // Step 3: Click on "Add" to create a new Employee
+  it("Create Employee", () => {
+    cy.get('#menu_pim_addEmployee').click();
+    cy.get('input[name="firstName"]').type("John");
+    cy.get('input[name="lastName"]').type("Doe");
+    cy.get('#employeeId').clear().type("EMP001");
+    cy.get('#btnSave').click();
+    cy.contains("Successfully Saved"); // Assumes a success message appears
+  });
+
+  // Step 4: Edit the Employee's information
+  it("Edit Employee", () => {
+    cy.get('#btnSave').click(); // Click "Edit" button
+    cy.get('input[name="personal[txtEmpFirstName]"]').clear().type("Jane");
+    cy.get('input[name="personal[txtEmpLastName]"]').clear().type("Smith");
+    cy.get('#btnSave').click();
+    cy.contains("Successfully Updated"); // Assumes a success message appears
+  });
+
+  // Step 5: Delete the Employee
+  it("Delete Employee", () => {
+    cy.get('#btnDelete').click();
+    cy.get('#dialogDeleteBtn').click();
+    cy.contains("Successfully Deleted"); // Assumes a success message appears
+  });
+});
