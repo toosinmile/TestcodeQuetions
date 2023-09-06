@@ -1,0 +1,44 @@
+describe("Admin CRUD Test", () => {
+  // Step 1: Login with credentials
+  it("Login as Admin", () => {
+    cy.visit("https://opensource-demo.orangehrmlive.com/"); // Open the OrangeHRM website
+    cy.title().should('eq', 'OrangeHRM')
+    cy.contains("Login").should("exist").should("be.visible");
+    cy.get('input[name="txtUsername"]').type("Admin");
+    cy.get('input[name="txtPassword"]').type("admin123");
+    cy.get('input[name="Submit"]').click();
+  });
+
+  // Step 2: Navigate to "Admin"
+  it("Navigate to Admin Page", () => {
+    cy.get('#menu_admin_viewAdminModule').click();
+    cy.get('#menu_admin_UserManagement').click();
+    cy.get('#menu_admin_viewSystemUsers').click();
+  });
+
+  // Step 3: Click on "Add" to create a new Admin
+  it("Create Admin", () => {
+    cy.get('#btnAdd').click();
+    cy.get('#systemUser_employeeName_empName').type("John Smith");
+    cy.get('#systemUser_userName').type("NewAdmin");
+    cy.get('#systemUser_password').type("password123");
+    cy.get('#systemUser_confirmPassword').type("password123");
+    cy.get('#btnSave').click();
+    cy.contains("Successfully Saved"); // Assumes a success message appears
+  });
+
+  // Step 4: Edit the Admin's information
+  it("Edit Admin", () => {
+    cy.get('.odd td a').contains("NewAdmin").click();
+    cy.get('#systemUser_employeeName_empName').clear().type("John Doe");
+    cy.get('#btnSave').click();
+    cy.contains("Successfully Updated"); // Assumes a success message appears
+  });
+
+  // Step 5: Delete the Admin
+  it("Delete Admin", () => {
+    cy.get('#btnDelete').click();
+    cy.get('#deleteConfModal').contains("Ok").click();
+    cy.contains("Successfully Deleted"); // Assumes a success message appears
+  });
+});
